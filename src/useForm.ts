@@ -36,6 +36,7 @@ import {
   setValues,
 } from './utils/valueUtil';
 import cloneDeep from './utils/cloneDeep';
+import useWatch from './useWatch';
 
 type InvalidateFieldEntity = { INVALIDATE_NAME_PATH: InternalNamePath };
 
@@ -948,7 +949,10 @@ export class FormStore {
   };
 }
 
-function useForm<Values = any>(form?: FormInstance<Values>): [FormInstance<Values>] {
+function useForm<Values = any>(
+  form?: FormInstance<Values>,
+  dependencies?: NamePath[],
+): [FormInstance<Values>] {
   const formRef = React.useRef<FormInstance>();
   const [, forceUpdate] = React.useState({});
 
@@ -966,6 +970,7 @@ function useForm<Values = any>(form?: FormInstance<Values>): [FormInstance<Value
       formRef.current = formStore.getForm();
     }
   }
+  useWatch(dependencies, formRef.current);
 
   return [formRef.current];
 }

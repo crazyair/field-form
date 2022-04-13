@@ -2,7 +2,7 @@ import type { FormInstance } from '.';
 import { FieldContext } from '.';
 import { HOOK_MARK } from './FieldContext';
 import type { InternalFormInstance, NamePath } from './interface';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { getNamePath, containsNamePath } from './utils/valueUtil';
 
 const useWatch = <Values = any>(dependencies?: NamePath[], form?: FormInstance<Values>) => {
@@ -11,9 +11,12 @@ const useWatch = <Values = any>(dependencies?: NamePath[], form?: FormInstance<V
   const fieldContext = useContext(FieldContext);
   const { getFieldsValue, getInternalHooks } = (form || fieldContext) as InternalFormInstance;
   const { watchMap } = getInternalHooks(HOOK_MARK);
+  const hsaDeps = useRef(!!dependencies?.length);
 
   useEffect(() => {
-    forceUpdate({});
+    if (hsaDeps.current) {
+      forceUpdate({});
+    }
   }, []);
 
   useEffect(() => {

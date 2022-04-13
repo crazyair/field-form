@@ -24,11 +24,12 @@ const Demo2 = React.memo(() => {
 });
 
 export default () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm(undefined, ['name', 'age', 'initialValue']);
   const [visible, setVisible] = useState(true);
   const [visible2, setVisible2] = useState(true);
   const [visible3, setVisible3] = useState(true);
-  const values = Form.useWatch(['name', 'age', 'initialValue'], form);
+  // const values = Form.useWatch(['name', 'age', 'initialValue'], form);
+  const values = form.getFieldsValue();
   console.log('main watch', values);
   return (
     <>
